@@ -13,8 +13,8 @@
  * to license@zend.com so we can send you a copy immediately.
  *
  * @category   Zend
- * @package    Zend_Service
- * @subpackage Zend_Service_Google
+ * @package    Zend_Gdata
+ * @subpackage C2dm
  * @copyright  Copyright (c) 2005-2010 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  * @version    $Id$
@@ -25,12 +25,12 @@
  * Implements an individual message to a client
  *
  * @category   Zend
- * @package    Zend_Service
- * @subpackage Zend_Service_Google
+ * @package    Zend_Gdata
+ * @subpackage C2dm
  * @copyright  Copyright (c) 2005-2010 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
-class Zend_Service_Google_C2dm_Message
+class Zend_Gdata_C2dm_Message
 {
     /**
      * @var string
@@ -53,7 +53,7 @@ class Zend_Service_Google_C2dm_Message
      * @param string $registrationId
      * @param string $collapseKey
      * @param array  $data
-     * @return Zend_Service_Google_C2dm_Message
+     * @return Zend_Gdata_C2dm_Message
      */
     public function __construct($registrationId=null, $collapseKey=null, array $data=array()) {
         $this->setRegistrationId($registrationId);
@@ -76,14 +76,14 @@ class Zend_Service_Google_C2dm_Message
      * Set Registration ID
      *
      * @param string $registrationId
-     * @return Zend_Service_Google_C2dm_Message
-     * @throws Zend_Service_Google_C2dm_Exception
+     * @return Zend_Gdata_C2dm_Message
+     * @throws Zend_Gdata_C2dm_Exception
      */
     public function setRegistrationId($registrationId)
     {
         if (!is_string($registrationId)) {
-            require_once 'Zend/Service/Google/C2dm/Exception.php';
-            throw new Zend_Service_Google_C2dm_Exception('setRegistrationId() requires a string for registrationId');
+            require_once 'Zend/Gdata/C2dm/Exception.php';
+            throw new Zend_Gdata_C2dm_Exception('setRegistrationId() requires a string for registrationId');
         }
         $this->_registrationId = $registrationId;
         return $this;
@@ -103,14 +103,14 @@ class Zend_Service_Google_C2dm_Message
      * Set Collapse Key
      *
      * @param string $collapseKey
-     * @return Zend_Service_Google_C2dm_Message
-     * @throws Zend_Service_Google_C2dm_Exception
+     * @return Zend_Gdata_C2dm_Message
+     * @throws Zend_Gdata_C2dm_Exception
      */
     public function setCollapseKey($collapseKey)
     {
         if (!is_string($collapseKey)) {
-            require_once 'Zend/Service/Google/C2dm/Exception.php';
-            throw new Zend_Service_Google_C2dm_Exception('setCollapseKey() requires a string for collapseKey');
+            require_once 'Zend/Gdata/C2dm/Exception.php';
+            throw new Zend_Gdata_C2dm_Exception('setCollapseKey() requires a string for collapseKey');
         }
         $this->_collapseKey = $collapseKey;
         return $this;
@@ -130,7 +130,7 @@ class Zend_Service_Google_C2dm_Message
      * Set a Data Array
      *
      * @param array $data
-     * @return Zend_Service_Google_C2dm_Message
+     * @return Zend_Gdata_C2dm_Message
      */
     public function setData(array $data)
     {

@@ -13,29 +13,34 @@
  * to license@zend.com so we can send you a copy immediately.
  *
  * @category   Zend
- * @package    Zend_Service
- * @subpackage Zend_Service_Google
+ * @package    Zend_Gdata
+ * @subpackage C2dm
  * @copyright  Copyright (c) 2005-2010 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  * @version    $Id$
  */
 
 /**
- * @see Zend_Service_Google_C2dm_Message
+ * @see Zend_Http_Client
  */
-require_once 'Zend/Service/Google/C2dm/Message.php';
+require_once 'Zend/Http/Client.php';
+
+/**
+ * @see Zend_Gdata_C2dm_Message
+ */
+require_once 'Zend/Gdata/C2dm/Message.php';
 
 /**
  * Service Google C2dm
  * Implementation for Android Cloud to Device Messaging
  *
  * @category   Zend
- * @package    Zend_Service
- * @subpackage Zend_Service_Google
+ * @package    Zend_Gdata
+ * @subpackage C2dm
  * @copyright  Copyright (c) 2005-2010 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
-class Zend_Service_Google_C2dm
+class Zend_Gdata_C2dm
 {
     /**
      * @var string
@@ -68,7 +73,7 @@ class Zend_Service_Google_C2dm
     protected $_options = array();
 
     /**
-     * @var Zend_Service_Google_C2dm_Message
+     * @var Zend_Gdata_C2dm_Message
      */
     protected $_lastMessage;
 
@@ -81,7 +86,7 @@ class Zend_Service_Google_C2dm
      * Constructor
      *
      * @param array|Zend_Config $options
-     * @return Zend_Service_Google_C2dm
+     * @return Zend_Gdata_C2dm
      */
     public function __construct($options=array())
     {
@@ -102,16 +107,16 @@ class Zend_Service_Google_C2dm
      * Set Options for C2DM
      *
      * @param array|Zend_Config $options
-     * @return Zend_Service_Google_C2dm
-     * @throws Zend_Service_Google_C2dm_Exception
+     * @return Zend_Gdata_C2dm
+     * @throws Zend_Gdata_C2dm_Exception
      */
     public function setOptions($options)
     {
         if ($options instanceof Zend_Config) {
             $options = $options->toArray();
         } elseif (!is_array($options)) {
-            require_once 'Zend/Service/Google/C2dm/Exception.php';
-            throw new Zend_Service_Google_C2dm_Exception('setOptions() expects either an array or a Zend_Config object');
+            require_once 'Zend/Gdata/C2dm/Exception.php';
+            throw new Zend_Gdata_C2dm_Exception('setOptions() expects either an array or a Zend_Config object');
         }
 
         foreach ($options as $key => $value) {
@@ -140,13 +145,13 @@ class Zend_Service_Google_C2dm
      * Set Login Token
      *
      * @param string $token
-     * @return Zend_Service_Google_C2dm
-     * @throws Zend_Service_Google_C2dm_Exception
+     * @return Zend_Gdata_C2dm
+     * @throws Zend_Gdata_C2dm_Exception
      */
     public function setLoginToken($token) {
         if (!is_string($token)) {
-            require_once 'Zend/Service/Google/C2dm/Exception.php';
-            throw new Zend_Service_Google_C2dm_Exception('setLoginToken() expects a string');
+            require_once 'Zend/Gdata/C2dm/Exception.php';
+            throw new Zend_Gdata_C2dm_Exception('setLoginToken() expects a string');
         }
         $this->_loginToken = $token;
         return $this;
@@ -171,7 +176,7 @@ class Zend_Service_Google_C2dm
     /**
      * Set Http Client
      *
-     * @return Zend_Service_Google_C2dm
+     * @return Zend_Gdata_C2dm
      */
     public function setHttpClient(Zend_Http_Client $client)
     {
@@ -183,14 +188,14 @@ class Zend_Service_Google_C2dm
      * Prepare an HTTP Request for C2DM
      *
      * @return void
-     * @throws Zend_Service_Google_C2dm_Exception
+     * @throws Zend_Gdata_C2dm_Exception
      */
     protected function _prepareHttpRequest()
     {
         $client = $this->getHttpClient();
         $token = $this->getLoginToken();
         if (empty($token)) {
-            throw new Zend_Service_Google_C2dm_Exception('Sending a message requires a Google Authorization Token');
+            throw new Zend_Gdata_C2dm_Exception('Sending a message requires a Google Authorization Token');
         }
         $client->setUri($this->_defaultPostUri);
         $client->setHeaders('Authorization', 'GoogleLogin auth=' . $this->getLoginToken());
@@ -203,16 +208,16 @@ class Zend_Service_Google_C2dm
     /**
      * Send a Message
      *
-     * @param Zend_Service_Google_C2dm_Message $message
+     * @param Zend_Gdata_C2dm_Message $message
      * @return boolean
-     * @throws Zend_Service_Google_C2dm_Exception
+     * @throws Zend_Gdata_C2dm_Exception
      */
-    public function sendMessage(Zend_Service_Google_C2dm_Message $message)
+    public function sendMessage(Zend_Gdata_C2dm_Message $message)
     {
         $this->_lastMessage = $message;
         if (!$message->validate()) {
-            require_once 'Zend/Service/Google/C2dm/Exception.php';
-            throw new Zend_Service_Google_C2dm_Exception('sendMessage was unable to validate the message');
+            require_once 'Zend/Gdata/C2dm/Exception.php';
+            throw new Zend_Gdata_C2dm_Exception('sendMessage was unable to validate the message');
         }
         $this->_prepareHttpRequest();
         $client = $this->getHttpClient();
@@ -227,12 +232,12 @@ class Zend_Service_Google_C2dm
         // check the response for errors:
         switch ($response->getStatus()) {
             case 503:
-                require_once 'Zend/Service/Google/C2dm/Exception/ServerUnavailable.php';
-                throw new Zend_Service_Google_C2dm_Exception_ServerUnavailable('The server was unavailable, check Retry-After and try again');
+                require_once 'Zend/Gdata/C2dm/Exception/ServerUnavailable.php';
+                throw new Zend_Gdata_C2dm_Exception_ServerUnavailable('The server was unavailable, check Retry-After and try again');
                 break;
             case 401:
-                require_once 'Zend/Service/Google/C2dm/Exception/InvalidAuthToken.php';
-                throw new Zend_Service_Google_C2dm_Exception_InvalidAuthToken('The Auth token: ' . $this->getLoginToken() . ' was invalid');
+                require_once 'Zend/Gdata/C2dm/Exception/InvalidAuthToken.php';
+                throw new Zend_Gdata_C2dm_Exception_InvalidAuthToken('The Auth token: ' . $this->getLoginToken() . ' was invalid');
                 break;
             default:
                 // check response body for any errors.
@@ -241,11 +246,11 @@ class Zend_Service_Google_C2dm
                 $body = preg_split('/=/', $body);
                 if (!isset($body[0]) || !isset($body[1])) {
                     // bad response from google
-                    require_once 'Zend/Service/Google/C2dm/Exception/ServerUnavailable.php';
-                    throw new Zend_Service_Google_C2dm_Exception_ServerUnavailable('The server gave us an invalid response, we need to try again.');
+                    require_once 'Zend/Gdata/C2dm/Exception/ServerUnavailable.php';
+                    throw new Zend_Gdata_C2dm_Exception_ServerUnavailable('The server gave us an invalid response, we need to try again.');
                 }
                 if (strtolower($body[0]) == 'error') {
-                    $exception = "Zend_Service_Google_C2dm_Exception_{$body[1]}";
+                    $exception = "Zend_Gdata_C2dm_Exception_{$body[1]}";
                     require_once str_replace('_', '/', $exception) . '.php';
                     throw new $exception();
                 }
@@ -256,7 +261,7 @@ class Zend_Service_Google_C2dm
     /**
      * Gets the Last Sent Message
      *
-     * @return Zend_Service_Google_C2dm_Message
+     * @return Zend_Gdata_C2dm_Message
      */
     public function getLastMessage()
     {

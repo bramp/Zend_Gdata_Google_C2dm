@@ -25,7 +25,7 @@ Sorry about the formatting, textile in GitHub really does not like whitespace in
         $client = Zend_GData_ClientLogin::getHttpClient(
             C2DM_USERNAME,
             C2DM_PASSWORD,
-            Zend_Service_Google_C2dm::AUTH_SERVICE_NAME,
+            Zend_Gdata_Google_C2dm::AUTH_SERVICE_NAME,
             null,
             C2DM_APPLICATION
         );
@@ -38,14 +38,14 @@ Sorry about the formatting, textile in GitHub really does not like whitespace in
         echo 'Problem authenticating: ' . $ae->exception() . PHP_EOL;
         exit(1);
     }
-    $c2dm = new Zend_Service_Google_C2dm();
+    $c2dm = new Zend_Gdata_Google_C2dm();
     $c2dm->setLoginToken($client->getClientLoginToken());
     $registrationId = 'THE_REGISTRATION_ID_OF_THE_PHONE';
     $collapseKey    = 'aUniqueStackableIdentifier';
     $data = array(
         'key' => 'value-pairs'
     );
-    $message = new Zend_Service_Google_C2dm_Message(
+    $message = new Zend_Gdata_Google_C2dm_Message(
         $registrationId,
         $collapseKey,
         $data
@@ -55,25 +55,25 @@ Sorry about the formatting, textile in GitHub really does not like whitespace in
         $tryAgain = false;
         try {
             $c2dm->sendMessage($message);
-        } catch (Zend_Service_Google_C2dm_Exception_QuotaExceeded $e) {
+        } catch (Zend_Gdata_Google_C2dm_Exception_QuotaExceeded $e) {
             $failCount++;
             $tryAgain = true;
             usleep(getBackOffTime($failCount, $c2dm->getLastResponse()) * 1000);
-        } catch (Zend_Service_Google_C2dm_Exception_ServerUnavailable $e) {
+        } catch (Zend_Gdata_Google_C2dm_Exception_ServerUnavailable $e) {
             $failCount++;
             $tryAgain = true;
             usleep(getBackOffTime($failCount, $c2dm->getLastResponse()) * 1000);
-        } catch (Zend_Service_Google_C2dm_Exception_InvalidRegistration $e) {
+        } catch (Zend_Gdata_Google_C2dm_Exception_InvalidRegistration $e) {
             // do not attempt to send a message to this id again
-        } catch (Zend_Service_Google_C2dm_Exception_NotRegistered $e) {
+        } catch (Zend_Gdata_Google_C2dm_Exception_NotRegistered $e) {
             // do not attempt to send a message to this id again
-        } catch (Zend_Service_Google_C2dm_Exception_DeviceQuotaExceeded $e) {
+        } catch (Zend_Gdata_Google_C2dm_Exception_DeviceQuotaExceeded $e) {
             // you may attempt to retry, however, it may be best to let it go away
-        } catch (Zend_Service_Google_C2dm_Exception_MessageTooBig $e) {
+        } catch (Zend_Gdata_Google_C2dm_Exception_MessageTooBig $e) {
             // you may want to log this one and find the offending code and reduce the message size
-        } catch (Zend_Service_Google_C2dm_Exception_MissingCollapseKey $e) {
+        } catch (Zend_Gdata_Google_C2dm_Exception_MissingCollapseKey $e) {
             // you may want to log this one and find the offending code to ensure that this is pushed in
-        } catch (Zend_Service_Google_C2dm_Exception $e) {
+        } catch (Zend_Gdata_Google_C2dm_Exception $e) {
             // all of the rest of the exceptions are fatal in nature, log the exception and kill the client
             // sometimes we simply just need to generate a new auth token.
             exit(1);

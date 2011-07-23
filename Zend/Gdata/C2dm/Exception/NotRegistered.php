@@ -13,8 +13,8 @@
  * to license@zend.com so we can send you a copy immediately.
  *
  * @category   Zend
- * @package    Zend_Service
- * @subpackage Zend_Service_Google
+ * @package    Zend_Gdata
+ * @subpackage C2dm
  * @copyright  Copyright (c) 2005-2010 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  * @version    $Id$
@@ -22,18 +22,18 @@
 
 
 /**
- * @see Zend_Service_Google_C2dm_Exception
+ * @see Zend_Gdata_C2dm_Exception
  */
-require_once 'Zend/Service/Google/C2dm/Exception.php';
+require_once 'Zend/Gdata/C2dm/Exception.php';
 
 
 /**
  * @category   Zend
- * @package    Zend_Service
- * @subpackage Zend_Service_Google
+ * @package    Zend_Gdata
+ * @subpackage C2dm
  * @copyright  Copyright (c) 2005-2010 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
-class Zend_Service_Google_C2dm_Exception_InvalidRegistration extends Zend_Service_Google_C2dm_Exception
+class Zend_Gdata_C2dm_Exception_NotRegistered extends Zend_Gdata_C2dm_Exception
 {}
 
